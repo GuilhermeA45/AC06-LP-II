@@ -85,25 +85,27 @@ class Aluno(Pessoa):
 
     def __init__(self, nome: str, telefone: int,
                  email: str, n_matricula: int) -> None:
-        pass
+        super().__init__(nome, telefone, email)
+        self.n_matricula = n_matricula
+        self.lista_dicp = []
 
     def get_matricula(self) -> int:
         '''
         Acessor do atributo matricula
         '''
-        pass
+        return self.n_matricula
 
     def matricular(self, disciplina: Disciplina) -> None:
         '''
         Realiza matrícula do Aluno na disciplina
         '''
-        pass
+        self.lista_dicp.append(disciplina)
 
     def lista_disciplinas(self) -> list:
         '''
         Devolve a lista de disciplinas em que o aluno esta matriculado
         '''
-        pass
+        return self.lista_dicp
 
 
 class Professor(Pessoa):
@@ -111,7 +113,10 @@ class Professor(Pessoa):
     Entidade professor do Modelo
     '''
     def __init__(self, nome, telefone, email):
-        pass
+        super().__init__(nome, telefone, email)
+        self.limite = 200
+        self.qnt_h = 0
+        self.lista_dicp_professor = []
 
     def ministra(self, disciplina: Disciplina) -> None:
         '''
@@ -120,10 +125,20 @@ class Professor(Pessoa):
         Caso um professor tente atribuir mais de 200h devolve
         ValueError
         '''
-        pass
+        if disciplina.get_carga_horaria() + self.qnt_h > self.limite:
+            raise ValueError('Excedeu a carga horaria!')
+        self.lista_dicp_professor.append(disciplina)
+        self.qnt_h = disciplina.get_carga_horaria() + self.qnt_h
 
     def lista_disciplinas(self) -> list:
         '''
         lista as disciplinas ministradas pelo professor
         '''
-        pass
+        return self.lista_dicp_professor
+
+
+if __name__ == '__main__':
+    aluno = Aluno('Lucas', 994658228, 'lucas@gmail.com', 1)
+    disciplina = Disciplina('Matematica', 12)
+    aluno.matricular(disciplina)
+    print(aluno.lista_disciplinas())
